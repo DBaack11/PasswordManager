@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+{% extends 'manager/base.html' %}
+
+
+<html lang="en">
+
+<script>
+    function confirmDelete(){
+        confirm("Deleting this account will cause all of the information to be lost.\nDo you wish to continue?");
+    }
+</script>
+
+<head>
+    <meta charset="UTF-8">
+    <title>Manager</title>
+</head>
+{% block content %}
+<body>
+    <u></u><h1>{{user.username}}'s Account Manager</h1></u>
+    <a href="{% url 'addAccount' %}">Add Account</a>
+
+    <ul>
+        {% for account in accounts %}
+        <li>
+            {{account.source}}
+            <a href="{% url 'editAccount' account.id %}">View/Edit</a>
+            {% if account.link %}<a href={{account.link}} target="_blank">Visit Page</a>{% endif %}
+            <form style="display: inline;" method="POST" action="{% url 'deleteAccount' account.id %}">
+                {% csrf_token %}
+                <button type="submit" onclick="return confirm('Deleting this account will cause all of the information to be lost.\nDo you wish to continue?')">Delete</button>
+            </form>
+        </li>
+        {% endfor %}
+    </ul>
+</body>
+
+<br>
+<br>
+<br>
+
+{% endblock %}
+</html>

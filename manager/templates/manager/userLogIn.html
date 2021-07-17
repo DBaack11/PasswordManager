@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Log In</title>
+</head>
+{% extends 'manager/base.html' %}
+
+{% block content %}
+<body>
+    <h1>Log In</h1>
+    <a href="{% url 'home' %}">Home Page</a>
+
+    <br>
+    <h2>{{success}}</h2>
+    <h2>{{error}}</h2>
+    <br>
+
+    <form method="POST">
+        {% csrf_token %}
+        {{form.as_p}}
+        <button type="submit">Log In</button>
+    </form>
+</body>
+
+{% endblock %}
+</html>
