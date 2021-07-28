@@ -71,6 +71,7 @@ def addAccount(request):
         newAccount.save()
         return redirect('manager')
 
+
 def editAccount(request, account_pk):
     account = get_object_or_404(Account, pk=account_pk, user=request.user)
     if request.method == "GET":
@@ -81,20 +82,37 @@ def editAccount(request, account_pk):
         form.save()
         return redirect('manager')
 
+
 def deleteAccount(request, account_pk):
     account = get_object_or_404(Account, pk=account_pk, user=request.user)
     if request.method == "POST":
         account.delete()
         return redirect('manager')
 
-def passwordStrength(request):
-    return render(request, 'manager/passwordStrength.html')
 
-def passwordExposure(request):
-    return render(request, 'manager/passwordExposure.html')
+def passwordStrength(request, account_pk):
+    account = get_object_or_404(Account, pk=account_pk, user=request.user)
+    if request.method == "GET":
+        password = account.password
+        strength = determinePasswordStrength(password)
 
-def passwordGenerator(request):
-    return render(request, 'manager/passwordGenerator.html')
+        return render(request, 'manager/passwordStrength.html', {"strength":strength})
+
+
+def passwordExposure(request, account_pk):
+    account = get_object_or_404(Account, pk=account_pk, user=request.user)
+    if request.method == "GET":
+        password = account.password
+        passwordHex = hexString(password)
+        tempExposure = determinePasswordExposure(passwordHex)
+        exposure = None
+        exposureCount = 0
+        if not tempExposure:
+            exposure = tempExposure
+        else:
+            exposure = tempExposure[0]
+            exposureCount = tempExposure[1]
+        return render(request, 'manager/passwordExposure.html', {"exposure":exposure, "exposureCount":exposureCount})
 
 
 def determinePasswordStrength(password):
@@ -120,18 +138,23 @@ def determinePasswordStrength(password):
 
         if complexity > 1 and len(password) > 5:
             if complexity == 5:
-                return "STRONG"
+                return "STRONG. It is unlikely that your password is or will be compromised. However, password security is never certain. "
             elif complexity == 4:
-                return "GOOD"
+                return "GOOD. Your password possesses attributes that can protect your private information from exposure.\n" \
+                       "However, password security is never certain."
             elif complexity == 3:
-                return "OKAY"
+                return "OKAY. Your password could potentially be compromised.\nThis can put vital personal information protected" \
+                       " by this password at risk of being exposed or stolen.\n"
             else:
-                return "WEAK"
+                return "WEAK. Your password could potentially be compromised, if not already.\nThis can put vital personal information protected" \
+                       " by this password at risk of being exposed or stolen.\n"
         else:
-            return "VERY WEAK"
+            return "VERY WEAK. More than likely, your password has already been exposed.\nThis can put vital personal information protected" \
+                       " by this password at risk of being exposed or stolen.\n"
 
     else:
         return "Error: Incomplete value entered."
+
 
 def hexString(password):
     md5Hash = hashlib.md5(password.encode())
@@ -144,6 +167,7 @@ def hexString(password):
     sha256Hex = sha256Hash.hexdigest()
 
     return md5Hex[:10], sha1Hex[:10], sha256Hex[:10]
+
 
 def determinePasswordExposure(passwordHex):
     enzoicURL = "https://api.enzoic.com/passwords"
@@ -159,7 +183,7 @@ def determinePasswordExposure(passwordHex):
     enzoicResponse = requests.post(enzoicURL, headers=headers, data=data)
 
     if enzoicResponse.status_code == 200:
-        print(json.dumps(enzoicResponse.json(), indent=4))
+        #print(json.dumps(enzoicResponse.json(), indent=4))
         exposureCount = enzoicResponse.json()["candidates"][0]["exposureCount"]
         return True, exposureCount
     else:

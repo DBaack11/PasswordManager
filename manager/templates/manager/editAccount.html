@@ -12,13 +12,13 @@
 
     <br>
     <h4 style="display: inline;">Is My Password Strong?</h4>
-    <a href="{% url 'passwordStrength' %}">Check Password Strength</a>
+    <a href="{% url 'passwordStrength' account.id %}">Check Password Strength</a>
     <br>
     <h4 style="display: inline;">Is My Password Exposed?</h4>
-    <a href="{% url 'passwordExposure' %}">Check Password Exposure</a>
+    <a href="{% url 'passwordExposure' account.id %}">Check Password Exposure</a>
     <br>
     <h4 style="display: inline;">Need A Strong Password?</h4>
-    <a href="{% url 'passwordGenerator' %}">Generate Password</a>
+    <a href="https://www.enzoic.com/strong-password/" target="_blank">Strong Password Guidelines</a>
     <br>
     <form method="POST">
         {% csrf_token %}

@@ -1,12 +1,25 @@
+
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <title>Home Page</title>
 </head>
-<body>
-    <h1>Home Page</h1>
-    <a href="{% url 'userSignUp' %}">Sign Up</a>
-    <a href="{% url 'userLogIn' %}">Log In</a>
-</body>
+
+<style>
+    .font{
+        font-family: Arial;
+    }
+</style>
+
+<div class="container text-center">
+    <body class="font">
+        <h1 style="margin-top:20%;">Welcome to Password Manager!</h1>
+        <a href="{% url 'userSignUp' %}" class="btn btn-primary">Sign Up</a>
+        <a href="{% url 'userLogIn' %}" class="btn btn-primary">Log In</a>
+
+    </body>
+</div>
 </html>
