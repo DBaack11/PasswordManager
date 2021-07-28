@@ -25,6 +25,9 @@ urlpatterns = [
     path('logout', views.userLogOut, name='logout'),
     path('manager/', views.manager, name='manager'),
     path('addAccount', views.addAccount, name='addAccount'),
-    path('editAccount/<int:account_pk>', views.editAccount, name='editAccount'),
+    path('passwordStrength', views.passwordStrength, name='passwordStrength'),
+    path('passwordExposure', views.passwordExposure, name='passwordExposure'),
+    path('passwordGenerator', views.passwordGenerator, name='passwordGenerator'),
+    path('editAccount/<int:account_pk>/', views.editAccount, name='editAccount'),
     path('editAccount/<int:account_pk>/delete', views.deleteAccount, name='deleteAccount'),
 ]

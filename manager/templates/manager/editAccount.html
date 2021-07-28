@@ -11,7 +11,15 @@
     <h1>Edit Account</h1>
 
     <br>
-
+    <h4 style="display: inline;">Is My Password Strong?</h4>
+    <a href="{% url 'passwordStrength' %}">Check Password Strength</a>
+    <br>
+    <h4 style="display: inline;">Is My Password Exposed?</h4>
+    <a href="{% url 'passwordExposure' %}">Check Password Exposure</a>
+    <br>
+    <h4 style="display: inline;">Need A Strong Password?</h4>
+    <a href="{% url 'passwordGenerator' %}">Generate Password</a>
+    <br>
     <form method="POST">
         {% csrf_token %}
         {{form.as_p}}
